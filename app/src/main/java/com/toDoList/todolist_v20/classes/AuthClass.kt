@@ -1,12 +1,15 @@
 package com.toDoList.todolist_v20.classes
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.toDoList.todolist_v20.R
@@ -14,10 +17,13 @@ import com.toDoList.todolist_v20.databinding.AuthPinFormBinding
 import com.toDoList.todolist_v20.objects.Variable
 import com.toDoList.todolist_v20.objects.Variable.dbManagerAuth
 
+
+@SuppressLint("StaticFieldLeak")
 lateinit var bindingAuth:AuthPinFormBinding
 
 class AuthClass: AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,6 +71,7 @@ class AuthClass: AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun pinCodeButtons(){
         bindingAuth.apply {
             floatingActionButton1.setOnClickListener(@Suppress("UNUSED_PARAMETER") View.OnClickListener
@@ -148,6 +155,7 @@ class AuthClass: AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun fingerPrintButton(){
 
 
@@ -171,51 +179,61 @@ class AuthClass: AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun checkBiometric() {
+        val main = Intent(this@AuthClass, MainActivity::class.java)
 
-        val prompt = BiometricPrompt.Builder(this)
-            .setTitle("Авторизация по отпечатку пальца")
-            .setDescription("Используйте свой отпечаток для авторизации")
-            .setNegativeButton("Отмена", this.mainExecutor
-            ) { _, _ ->             Variable.fingerPrintYes = true; fingerPrintButton()
-            }
-            .build()
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.M){
 
-        prompt.authenticate(
-            getCancellationSignal(),this.mainExecutor,
-            object : BiometricPrompt.AuthenticationCallback() {
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    Toast.makeText(this@AuthClass, "Не распознан." , Toast.LENGTH_LONG).show()
+            val prompt = BiometricPrompt.Builder(this)
+                .setTitle("Авторизация по отпечатку пальца")
+                .setDescription("Используйте свой отпечаток для авторизации")
+                .setNegativeButton("Отмена", this.mainExecutor
+                ) { _, _ ->             Variable.fingerPrintYes = true; fingerPrintButton()
                 }
+                .build()
 
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
-                    super.onAuthenticationError(errorCode, errString)
+            prompt.authenticate(
+                getCancellationSignal(),this.mainExecutor,
+                object : BiometricPrompt.AuthenticationCallback() {
 
-                    if (errorCode != BiometricPrompt.BIOMETRIC_ERROR_NO_BIOMETRICS  &&
-                        errorCode != BiometricPrompt.BIOMETRIC_ERROR_HW_UNAVAILABLE &&
-                        errorCode != BiometricPrompt.BIOMETRIC_ERROR_HW_NOT_PRESENT &&
-                        errorCode != BiometricPrompt.BIOMETRIC_ERROR_CANCELED &&
-                        errorCode != BiometricPrompt.BIOMETRIC_ERROR_NO_DEVICE_CREDENTIAL
-                    ) {Variable.fingerPrintYes = true; fingerPrintButton() }
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+                        Toast.makeText(this@AuthClass, "Не распознан." , Toast.LENGTH_LONG).show()
+                    }
 
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                        super.onAuthenticationError(errorCode, errString)
+
+                        if (errorCode != BiometricPrompt.BIOMETRIC_ERROR_NO_BIOMETRICS  &&
+                            errorCode != BiometricPrompt.BIOMETRIC_ERROR_HW_UNAVAILABLE &&
+                            errorCode != BiometricPrompt.BIOMETRIC_ERROR_HW_NOT_PRESENT &&
+                            errorCode != BiometricPrompt.BIOMETRIC_ERROR_CANCELED &&
+                            errorCode != BiometricPrompt.BIOMETRIC_ERROR_NO_DEVICE_CREDENTIAL
+                        ) {Variable.fingerPrintYes = true; fingerPrintButton() }
+
+                    }
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+                        super.onAuthenticationSucceeded(result)
+                        ContextCompat.startActivity(this@AuthClass,main, null)
+                        Variable.auth=true
+                    }
                 }
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
-                    super.onAuthenticationSucceeded(result)
-                    val main = Intent(this@AuthClass, MainActivity::class.java)
-                    ContextCompat.startActivity(this@AuthClass,main, null)
-                    Variable.auth=true
-                }
-            }
-        )
+            )
+        }else{
+            Variable.fingerPrintYes = false; fingerPrintButton()
+
+
+        }
     }
+
 
     private fun getCancellationSignal(): CancellationSignal {
         val cancelSignal = CancellationSignal()
         cancelSignal.setOnCancelListener {
         }
         return cancelSignal
+
     }
 
 

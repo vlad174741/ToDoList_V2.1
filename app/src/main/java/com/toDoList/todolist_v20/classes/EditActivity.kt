@@ -100,7 +100,7 @@ class EditActivity: AppCompatActivity() {
         bindingEdit.editTextEditActivityTitle.setText(i.getStringExtra(MyIntentConstant.INTENT_TITLE_KEY))
         bindingEdit.editTextEditActivitySubtitle.setText(i.getStringExtra(MyIntentConstant.INTENT_SUBTITLE_KEY))
         bindingEdit.imageViewActivityEdit.setImageURI(uriImageDb)
-        imageName =  bindingEdit.editTextEditActivityTitle.text.toString()
+        imageName = bindingEdit.editTextEditActivityTitle.text.toString() + ".image"
 
         checkImage()
         buttonsEditActivity()

@@ -63,6 +63,8 @@ object Tags {
                 tagUsingMainFragment = tag
                 mainFragmentTag = tag
                 rcAdapter.clearItemSelect()
+                Variable.prevPositionRcView = -1
+
 
                 Log.d("tag", tag)
             }

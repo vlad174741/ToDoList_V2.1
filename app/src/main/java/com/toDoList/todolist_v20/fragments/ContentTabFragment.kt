@@ -13,6 +13,7 @@ import com.toDoList.todolist_v20.classes.ViewModelMy
 import com.toDoList.todolist_v20.adapters.ViewPagerAdapter
 import com.toDoList.todolist_v20.databinding.FragmentContentTabBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.toDoList.todolist_v20.R
 
 @SuppressLint("StaticFieldLeak")
 lateinit var bindingContTab: FragmentContentTabBinding
@@ -20,7 +21,7 @@ lateinit var bindingContTab: FragmentContentTabBinding
 class ContentTabFragment : Fragment() {
 
     private val fragmentList = listOf(MainFragment.newInstance(),  EditFragment.newInstance(), OptionFragment.newInstance())      //Массив с fragments для ViewPager2 и TabLayout //
-    private val fragmentListTitle = listOf("Главная","Создать","Опции")                                                          // Массив с заголовками для вкладок TabLayout //
+    private val fragmentListTitle = listOf("Заметки","Добавить","Опции")                                                          // Массив с заголовками для вкладок TabLayout //
 
     private val model: ViewModelMy by activityViewModels()
 

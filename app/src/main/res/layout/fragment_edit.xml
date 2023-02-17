@@ -41,8 +41,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/todo"
+                    android:visibility="visible"
                     tools:ignore="ImageContrastCheck"
                     tools:src="@tools:sample/avatars" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton_delete_photo_edit_fragment"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/todo"
+                    android:focusable="true"
+                    android:foreground="@drawable/ic_delete"
+                    android:foregroundGravity="center"
+                    android:visibility="visible"
+                    app:borderWidth="2dp"
+                    app:fabSize="normal"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -235,7 +253,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/todo"
                 android:focusable="true"
-                android:foreground="@drawable/ic_image_24"
+                android:foreground="@drawable/ic_baseline_menu_24"
                 android:foregroundGravity="center"
                 app:borderWidth="2dp"
                 app:fabSize="normal"
@@ -245,22 +263,24 @@
                 app:layout_constraintVertical_bias="0.0"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
 
-            <Button
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_save_edit_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center|right"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="8dp"
-                android:text="@string/insert"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                app:cornerRadius="20dp"
+                android:backgroundTint="@color/border_line_color"
+                android:contentDescription="@string/todo"
+                android:foreground="@drawable/ic_baseline_save_24"
+                android:foregroundGravity="center"
+                app:borderWidth="2dp"
+                app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="RtlHardcoded,TouchTargetSizeCheck" />
+                tools:ignore="UnusedAttribute,TouchTargetSizeCheck,ImageContrastCheck" />
 
             <LinearLayout
                 android:id="@+id/action_image_button_edit_fragment"
@@ -309,19 +329,22 @@
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton_delete_photo_edit_fragment"
-                    android:layout_width="45dp"
+                    android:id="@+id/floatingActionButton_add_notification_timer_edit_activity"
+                    android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
                     android:clickable="true"
                     android:contentDescription="@string/todo"
                     android:focusable="true"
-                    android:foreground="@drawable/ic_delete"
+                    android:foreground="@drawable/ic_baseline_notification_add_24"
                     android:foregroundGravity="center"
                     android:visibility="visible"
                     app:borderWidth="2dp"
                     app:fabSize="normal"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

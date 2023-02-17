@@ -183,7 +183,7 @@ class AuthClass: AppCompatActivity() {
     private fun checkBiometric() {
         val main = Intent(this@AuthClass, MainActivity::class.java)
 
-        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.M){
+        if (android.os.Build.VERSION.SDK_INT >= 28){
 
             val prompt = BiometricPrompt.Builder(this)
                 .setTitle("Авторизация по отпечатку пальца")

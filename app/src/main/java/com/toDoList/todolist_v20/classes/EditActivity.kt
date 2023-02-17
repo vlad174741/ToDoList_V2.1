@@ -71,6 +71,7 @@ class EditActivity: AppCompatActivity() {
 
 
         }
+        bindingEdit.actionImageButton.visibility = View.GONE
         bindingEdit.floatingActionButtonAddImageEditActivity.isEnabled = true
 
     }
@@ -172,37 +173,15 @@ class EditActivity: AppCompatActivity() {
 
 
             }
-            //Кнопка для скрытия окна с изображением
-            floatingActionButtonHideImageEditActivity.setOnClickListener {
-                cardViewImageActivityEdit.visibility = View.GONE
-                floatingActionButtonHideImageEditActivity.visibility = View.GONE
-                actionImageButton.visibility = View.GONE
-            }
+
             //Кнопка для выбора действий для изображения
             floatingActionButtonActionImageEditActivity.setOnClickListener {
-                if (cardViewImageActivityEdit.visibility == View.GONE){
 
-                    if (imageViewActivityEdit.drawable == null){
-                        if (actionImageButton.visibility == View.GONE) {
-                            actionImageButton.visibility = View.VISIBLE
-                        }else{
-                            actionImageButton.visibility = View.GONE
-                        }
-                    }else {
-                        if (actionImageButton.visibility == View.VISIBLE) {
-                            actionImageButton.visibility = View.GONE
-                        } else {
-                            cardViewImageActivityEdit.visibility = View.VISIBLE
-                            floatingActionButtonHideImageEditActivity.visibility = View.VISIBLE
-                        }
-                    }
-                }else{
                     if (actionImageButton.visibility == View.GONE) {
                         actionImageButton.visibility = View.VISIBLE
                     }else{
                         actionImageButton.visibility = View.GONE
                     }
-                }
             }
 
             //Кнопка для добавления изображения через галерею
@@ -218,12 +197,8 @@ class EditActivity: AppCompatActivity() {
             //Кнопка для удаления изображения
             floatingActionButtonDeletePhotoEditActivity.setOnClickListener {
                 alertDeleteDialog()
-
             }
 
-            imageViewActivityEdit.setOnClickListener {
-
-            }
 
             //Кнопки для фильтров
 
@@ -273,7 +248,6 @@ class EditActivity: AppCompatActivity() {
                 imageViewActivityEdit.setImageDrawable(null)
                 cardViewImageActivityEdit.visibility = View.GONE
                 actionImageButton.visibility = View.GONE
-                floatingActionButtonHideImageEditActivity.visibility = View.GONE
             }
         }
         alertDialog.setNegativeButton("Нет"){_,_ ->
@@ -286,13 +260,11 @@ class EditActivity: AppCompatActivity() {
     private fun checkImage() {
         bindingEdit.apply {
             if (imageViewActivityEdit.drawable != null) {
-                floatingActionButtonHideImageEditActivity.visibility = View.VISIBLE
                 floatingActionButtonDeletePhotoEditActivity.visibility = View.VISIBLE
                 cardViewImageActivityEdit.visibility = View.VISIBLE
                 actionImageButton.visibility = View.GONE
             }else{
                 floatingActionButtonDeletePhotoEditActivity.visibility = View.GONE
-                floatingActionButtonHideImageEditActivity.visibility = View.GONE
                 cardViewImageActivityEdit.visibility = View.GONE
                 actionImageButton.visibility = View.GONE
             }

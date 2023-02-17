@@ -72,7 +72,9 @@ class EditFragment : Fragment() {
             Variable.imgURI = it.data?.data.toString()
             checkImage()
 
+
         }
+        bindingEditFragment.actionImageButtonEditFragment.visibility = View.GONE
         bindingEditFragment.floatingActionButtonAddImageEditFragment.isEnabled = true
 
     }
@@ -258,6 +260,8 @@ class EditFragment : Fragment() {
             PhotoAndImage.deletePhoto(contextEditFragment, PhotoAndImage.uri)
             PhotoAndImage.sendMessageGallery(contextEditFragment, PhotoAndImage.filePhoto)
             PhotoAndImage.uri = Uri.parse("")
+            bindingEditFragment.cardViewImageEditFragment.visibility = View.GONE
+
 
         }
         if (bindingEditFragment.imageViewEditFragment.drawable == null) {

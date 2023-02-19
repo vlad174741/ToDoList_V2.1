@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.CancellationSignal
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.toDoList.todolist_v20.classes.AuthClass
 import com.toDoList.todolist_v20.classes.MainActivity
@@ -13,6 +15,7 @@ import com.toDoList.todolist_v20.objects.Variable
 
 object FingerPrint {
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun fingerPrintDialog(context: Context) {
 
         val mainExecutor = ContextWrapper(context)

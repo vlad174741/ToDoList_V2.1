@@ -9,8 +9,5 @@ object MyIntentConstant {
     const val INTENT_TAG_KEY = "id_tag"
 
 
-    const val INTENT_EMAIL_KEY = "email"
-    const val INTENT_USERNAME_KEY = "username"
-    const val INTENT_PASSWORD_KEY = "password"
 
 }

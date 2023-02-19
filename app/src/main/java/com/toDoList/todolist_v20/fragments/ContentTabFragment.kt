@@ -13,7 +13,6 @@ import com.toDoList.todolist_v20.classes.ViewModelMy
 import com.toDoList.todolist_v20.adapters.ViewPagerAdapter
 import com.toDoList.todolist_v20.databinding.FragmentContentTabBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import com.toDoList.todolist_v20.R
 
 @SuppressLint("StaticFieldLeak")
 lateinit var bindingContTab: FragmentContentTabBinding

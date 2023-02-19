@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         dbManager = DataBaseManager(this)
         bindingMain = ActivityMainBinding.inflate(layoutInflater)  // ViewBinding //
 
+
         setContentView(bindingMain.root)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         Log.d("liveActivity", "MainActivity.onCreate")
@@ -76,5 +77,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("liveActivity", "MainActivity.onDestroy")
 
     }
+
 
 }

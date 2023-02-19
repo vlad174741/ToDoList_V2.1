@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 object SharedPreference {
 
     var authUsernamePref = ""
-    var prefsAuthUsername: SharedPreferences? = null
+    private var prefsAuthUsername: SharedPreferences? = null
 
     fun preferenceUsername(context: Context) {
 
@@ -18,8 +18,8 @@ object SharedPreference {
         authUsernamePref = prefsAuthUsername?.getString("username", "user")!!
     }
 
-    var authThemePref = ""
-    var prefsTheme: SharedPreferences? = null
+    private var authThemePref = ""
+    private var prefsTheme: SharedPreferences? = null
 
     fun preferenceTheme(context: Context) {
 

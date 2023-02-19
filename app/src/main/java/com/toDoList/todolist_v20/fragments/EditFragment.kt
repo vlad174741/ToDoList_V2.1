@@ -3,10 +3,13 @@ package com.toDoList.todolist_v20.fragments
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.*
 import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +18,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -24,6 +28,8 @@ import com.toDoList.todolist_v20.classes.ViewModelMy
 import com.toDoList.todolist_v20.dataBase.dbContent.DataBaseManager
 import com.toDoList.todolist_v20.dataClass.Data
 import com.toDoList.todolist_v20.databinding.FragmentEditBinding
+import com.toDoList.todolist_v20.notificationAlarm.AlertData
+import com.toDoList.todolist_v20.notificationAlarm.Notification
 import com.toDoList.todolist_v20.objects.PhotoAndImage
 import com.toDoList.todolist_v20.objects.Tags
 import com.toDoList.todolist_v20.objects.ToastText
@@ -33,6 +39,7 @@ import com.toDoList.todolist_v20.objects.Variable.dbManager
 
 @SuppressLint("StaticFieldLeak")
 lateinit var bindingEditFragment: FragmentEditBinding
+@SuppressLint("StaticFieldLeak")
 private lateinit var contextEditFragment: Context
 lateinit var hideKeyboard: InputMethodManager
 
@@ -104,10 +111,12 @@ class EditFragment : Fragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dbManager = DataBaseManager(contextEditFragment)
         hideKeyboard = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        bindingEditFragment.timePicker.setIs24HourView(true)
         dbManager.openDataBase()
         checkImage()
         buttonsEditFragment()
@@ -152,6 +161,7 @@ class EditFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun buttonsEditFragment(){
 
         bindingEditFragment.apply {
@@ -169,12 +179,24 @@ class EditFragment : Fragment() {
                 }
             }
 
-            //Кнопка для выбора действий для изображения
-            floatingActionButtonActionImageEditFragment.setOnClickListener {
+            //Кнопка для выбора действий
+            floatingActionButtonActionEditFragment.setOnClickListener {
                 if (actionImageButtonEditFragment.visibility == View.GONE) {
                     actionImageButtonEditFragment.visibility = View.VISIBLE
                 }else{
                     actionImageButtonEditFragment.visibility = View.GONE
+                }
+            }
+
+
+            //Кнопка для добавления уведомления с таймером
+            floatingActionButtonAddNotificationTimerEditActivity.setOnClickListener {
+                val title = editTextEditFragmentTitle.text
+
+                if (title.isEmpty()){
+                    ToastText.shortToast(contextEditFragment, "Введите заголовок")
+                }else {
+                    cardViewNotificationTimer.visibility = View.VISIBLE
                 }
             }
 
@@ -215,6 +237,24 @@ class EditFragment : Fragment() {
                 checkTag(radioButtonEditFragmentTagSport, Tags.sportTag)
             }
 
+
+            //Кнопка для установки таймера для заметки
+
+            buttonSelectNotificationTimer.setOnClickListener{
+                val title = editTextEditFragmentTitle.text
+
+                Variable.minute = timePicker.minute
+                Variable.hour = timePicker.hour
+                Variable.day = datePicker.dayOfMonth
+                Variable.month = datePicker.month
+                Variable.year = datePicker.year
+                Variable.notificationID = (0..1000).random()
+                Variable.channelID = title.toString()
+                cardViewNotificationTimer.visibility = View.GONE
+
+            }
+
+
             //Кнопка для сохранения заметки
             buttonSaveEditFragment.setOnClickListener{
 
@@ -225,13 +265,24 @@ class EditFragment : Fragment() {
                     ToastText.shortToast(contextEditFragment, "Введите заголовок")
                 }else{
                     ToastText.shortToast(contextEditFragment, "Сохраняем")
-                    hideKeyboard.hideSoftInputFromWindow(view!!.windowToken, 0)
+                    Variable.titleNotification = title.toString()
+                    Variable.messageNotification = subtitle.toString()
+                    hideKeyboard.hideSoftInputFromWindow(requireView().windowToken, 0)
 
                     dbManager.insertToDataBase(
                         title.toString(),subtitle.toString(), Tags.dbTag, Variable.imgURI)
 
+
+                    if(Variable.channelID != "") {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            Notification().createNotificationChannel(requireActivity())
+                        }
+                        scheduleNotification()
+                    }
+
                     PhotoAndImage.uri = Uri.parse("")
                     Variable.imgURI = "empty"
+                    Variable.channelID = ""
                     Tags.dbTag = "empty"
                     title.clear()
                     subtitle.clear()
@@ -250,6 +301,33 @@ class EditFragment : Fragment() {
             }
         }
     }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun scheduleNotification( )
+    {
+
+        val intent = Intent(ContextWrapper(contextEditFragment).applicationContext, Notification::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            ContextWrapper(contextEditFragment).applicationContext,
+            Variable.notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = AlertData.getTime()
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+        AlertData.showAlert(time, Variable.titleNotification, Variable.messageNotification, contextEditFragment)
+    }
+
+
+
 
     private fun takeAndSavePhoto(){
         PhotoAndImage.takeFullPhoto(getResultCapturePhoto, PhotoAndImage.FILE_NAME)

@@ -2,9 +2,7 @@ package com.toDoList.todolist_v20.adapters
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.toDoList.todolist_v20.fragments.ContentTabFragment
 
 class ViewPagerAdapter(frag: AppCompatActivity, private val list: List<Fragment>):FragmentStateAdapter(frag) {     // Наследуемся от FragmentStateAdapter который буде использовать список из фрагментов //
     override fun getItemCount(): Int {                                                                            // Сюда передаем количество элементов которое будет перелистовать ViewPager2 //

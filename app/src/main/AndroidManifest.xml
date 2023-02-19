@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.toDoList.todolist_v20">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -20,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoList_V20"
         android:requestLegacyExternalStorage="true"
-        tools:targetApi="31"
+        tools:targetApi="33"
         >
 
 
@@ -58,19 +60,20 @@
         </activity>
 
 
-
+        <receiver android:name=".notificationAlarm.Notification"
+            tools:ignore="Instantiatable" />
 
 
 
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.retrofittest.fileprovider"
+            android:authorities="com.example.retrofitted.fireproof"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/providerfile" />
+                android:resource="@xml/provider_file" />
         </provider>
     </application>
 

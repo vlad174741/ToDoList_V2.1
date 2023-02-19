@@ -1,4 +1,4 @@
-package com.toDoList.todolist_v20.dataBase.dbAuthorization
+package com.toDoList.todolist_v20.noUses
 
 class ListItemDbAuth {
     var emailLI = ""

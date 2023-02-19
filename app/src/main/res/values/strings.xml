@@ -45,7 +45,7 @@
         <string name="rememberMe">Запомнить меня</string>
         <string name="usePinCode">Использовать ПИН код</string>
         <string name="delete_mani">Удалить несколько</string>
-        <string name="do_you_whant_delete">Вы действительно хотите \n удалить заметку?</string>
+        <string name="do_you_want_delete">Вы действительно хотите \n удалить заметку?</string>
     <string name="clear">Очистить</string>
     <string name="singInToFingerPrint">Вход по отпечатку</string>
     <string name="authorizationOption">Настройки авторизации</string>

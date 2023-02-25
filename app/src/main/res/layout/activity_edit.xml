@@ -7,6 +7,213 @@
     tools:context=".classes.MainActivity">
 
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/tool_bar_edit_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/action_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_save_edit_activity"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/floatingActionButton_action_image_edit_activity"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton_add_image_edit_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:contentDescription="@string/todo"
+                    android:focusable="true"
+                    android:foreground="@drawable/change_photo_24"
+                    android:foregroundGravity="center"
+                    android:visibility="visible"
+                    app:borderWidth="2dp"
+                    app:fabSize="normal"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton_add_photo_edit_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/todo"
+                    android:focusable="true"
+                    android:foreground="@drawable/ic_photo_camera_24"
+                    android:foregroundGravity="center"
+                    android:visibility="visible"
+                    app:borderWidth="2dp"
+                    app:fabSize="normal"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton_add_notification_timer_edit_activity2"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:contentDescription="@string/todo"
+                    android:focusable="true"
+                    android:foreground="@drawable/ic_baseline_notification_add_24"
+                    android:foregroundGravity="center"
+                    android:visibility="visible"
+                    app:borderWidth="2dp"
+                    app:fabSize="normal"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButton_action_image_edit_activity"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:clickable="true"
+                android:contentDescription="@string/todo"
+                android:focusable="true"
+                android:foreground="@drawable/ic_baseline_menu_24"
+                android:foregroundGravity="center"
+                app:backgroundTint="@color/border_line_color"
+                app:borderWidth="2dp"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_save_edit_activity"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/border_line_color"
+                android:contentDescription="@string/todo"
+                android:foreground="@drawable/ic_baseline_save_24"
+                android:foregroundGravity="center"
+                app:borderWidth="2dp"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck,ImageContrastCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewNotificationTimer_editActivity"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/pickers_background"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/come_back_imageView_edit_activity"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="?attr/actionModeCloseDrawable" />
+
+            <TextView
+                android:id="@+id/textView_notificationCard_editActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:text="Установите дату и время для уведомления"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toTopOf="@+id/timePicker_notificationCard_editActivity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/come_back_imageView_edit_activity" />
+
+            <TimePicker
+                android:id="@+id/timePicker_notificationCard_editActivity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:timePickerMode="spinner"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.22000003" />
+
+            <DatePicker
+                android:id="@+id/datePicker_notificationCard_editActivity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:spinnersShown="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker_notificationCard_editActivity" />
+
+            <Button
+                android:id="@+id/button_notificationCard_editActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Установить"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/datePicker_notificationCard_editActivity" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
@@ -225,129 +432,5 @@
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
     </ScrollView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/tool_bar_edit_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/action_image_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button_save_edit_activity"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/floatingActionButton_action_image_edit_activity"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton_add_image_edit_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center_vertical"
-                    android:clickable="true"
-                    android:contentDescription="@string/todo"
-                    android:focusable="true"
-                    android:foreground="@drawable/change_photo_24"
-                    android:foregroundGravity="center"
-                    android:visibility="visible"
-                    app:borderWidth="2dp"
-                    app:fabSize="normal"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton_add_photo_edit_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/todo"
-                    android:focusable="true"
-                    android:foreground="@drawable/ic_photo_camera_24"
-                    android:foregroundGravity="center"
-                    android:visibility="visible"
-                    app:borderWidth="2dp"
-                    app:fabSize="normal"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton_add_notification_timer_edit_activity2"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/todo"
-                    android:focusable="true"
-                    android:foreground="@drawable/ic_baseline_notification_add_24"
-                    android:foregroundGravity="center"
-                    android:visibility="visible"
-                    app:borderWidth="2dp"
-                    app:fabSize="normal"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
-
-            </LinearLayout>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton_action_image_edit_activity"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:clickable="true"
-                android:contentDescription="@string/todo"
-                android:focusable="true"
-                android:foreground="@drawable/ic_baseline_menu_24"
-                android:foregroundGravity="center"
-                app:backgroundTint="@color/border_line_color"
-                app:borderWidth="2dp"
-                app:fabSize="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,UnusedAttribute,DuplicateSpeakableTextCheck,ImageContrastCheck" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_save_edit_activity"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/border_line_color"
-                android:contentDescription="@string/todo"
-                android:foreground="@drawable/ic_baseline_save_24"
-                android:foregroundGravity="center"
-                app:borderWidth="2dp"
-                app:fabSize="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck,ImageContrastCheck" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

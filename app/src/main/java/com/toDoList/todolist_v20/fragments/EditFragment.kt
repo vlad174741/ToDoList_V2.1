@@ -25,16 +25,19 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.toDoList.todolist_v20.classes.ViewModelMy
+import com.toDoList.todolist_v20.classes.bindingEdit
 import com.toDoList.todolist_v20.dataBase.dbContent.DataBaseManager
 import com.toDoList.todolist_v20.dataClass.Data
 import com.toDoList.todolist_v20.databinding.FragmentEditBinding
-import com.toDoList.todolist_v20.notificationAlarm.AlertData
+import com.toDoList.todolist_v20.notificationAlarm.*
 import com.toDoList.todolist_v20.notificationAlarm.Notification
 import com.toDoList.todolist_v20.objects.PhotoAndImage
 import com.toDoList.todolist_v20.objects.Tags
 import com.toDoList.todolist_v20.objects.ToastText
 import com.toDoList.todolist_v20.objects.Variable
 import com.toDoList.todolist_v20.objects.Variable.dbManager
+import com.toDoList.todolist_v20.objects.Variable.minute
+import java.util.*
 
 
 @SuppressLint("StaticFieldLeak")
@@ -196,8 +199,14 @@ class EditFragment : Fragment() {
                 if (title.isEmpty()){
                     ToastText.shortToast(contextEditFragment, "Введите заголовок")
                 }else {
+                    hideKeyboard.hideSoftInputFromWindow(requireView().windowToken, 0)
                     cardViewNotificationTimer.visibility = View.VISIBLE
+                    Log.d("notificationAlarm", "${Variable.notificationID}")
                 }
+            }
+
+            comeBackImageViewEditFragment.setOnClickListener{
+                cardViewNotificationTimer.visibility = View.GONE
             }
 
             //Кнопка для добавления изображения через галерею
@@ -241,16 +250,24 @@ class EditFragment : Fragment() {
             //Кнопка для установки таймера для заметки
 
             buttonSelectNotificationTimer.setOnClickListener{
-                val title = editTextEditFragmentTitle.text
+                val title = editTextEditFragmentTitle.text.toString()
 
-                Variable.minute = timePicker.minute
+                minute = timePicker.minute
                 Variable.hour = timePicker.hour
                 Variable.day = datePicker.dayOfMonth
                 Variable.month = datePicker.month
                 Variable.year = datePicker.year
-                Variable.notificationID = (0..1000).random()
-                Variable.channelID = title.toString()
                 cardViewNotificationTimer.visibility = View.GONE
+                val time = AlertData.getTime()
+                val date = Date(time)
+                val dateFormat = android.text.format.DateFormat.getLongDateFormat(ContextWrapper(context).applicationContext)
+                val timeFormat = android.text.format.DateFormat.getTimeFormat(ContextWrapper(context).applicationContext)
+                Variable.dataNotification = dateFormat.format(date)
+                Variable.timeNotification = timeFormat.format(date)
+                Variable.notificationID = (title.length + (100..1000).random() + dbManager.getLastOrFirstId(-1) + dbManager.getLastOrFirstId(1))
+
+                Log.d("notificationAlarm", "id: ${Variable.notificationID} | minute: $minute")
+
 
             }
 
@@ -265,24 +282,22 @@ class EditFragment : Fragment() {
                     ToastText.shortToast(contextEditFragment, "Введите заголовок")
                 }else{
                     ToastText.shortToast(contextEditFragment, "Сохраняем")
-                    Variable.titleNotification = title.toString()
-                    Variable.messageNotification = subtitle.toString()
                     hideKeyboard.hideSoftInputFromWindow(requireView().windowToken, 0)
 
+
                     dbManager.insertToDataBase(
-                        title.toString(),subtitle.toString(), Tags.dbTag, Variable.imgURI)
+                        title.toString(),subtitle.toString(), Tags.dbTag, Variable.imgURI, Variable.notificationID)
 
 
-                    if(Variable.channelID != "") {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            Notification().createNotificationChannel(requireActivity())
-                        }
-                        scheduleNotification()
+
+                    if(Variable.notificationID != 0) {
+                        scheduleNotification(title.toString(), subtitle.toString())
+                        Variable.notificationID = 0
+
                     }
 
                     PhotoAndImage.uri = Uri.parse("")
                     Variable.imgURI = "empty"
-                    Variable.channelID = ""
                     Tags.dbTag = "empty"
                     title.clear()
                     subtitle.clear()
@@ -304,10 +319,15 @@ class EditFragment : Fragment() {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun scheduleNotification( )
+    fun scheduleNotification(titleExtra:String, messageExtra:String)
     {
 
         val intent = Intent(ContextWrapper(contextEditFragment).applicationContext, Notification::class.java)
+
+
+        intent.putExtra(titleNotification, titleExtra)
+        intent.putExtra(messageNotification, messageExtra)
+
 
         val pendingIntent = PendingIntent.getBroadcast(
             ContextWrapper(contextEditFragment).applicationContext,
@@ -323,7 +343,7 @@ class EditFragment : Fragment() {
             time,
             pendingIntent
         )
-        AlertData.showAlert(time, Variable.titleNotification, Variable.messageNotification, contextEditFragment)
+        AlertData.showAlert(time, titleExtra, messageExtra, contextEditFragment)
     }
 
 

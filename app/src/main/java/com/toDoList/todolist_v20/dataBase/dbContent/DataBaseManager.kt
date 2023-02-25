@@ -5,8 +5,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import com.toDoList.todolist_v20.objects.Variable
 import com.toDoList.todolist_v20.dataClass.DataRcView
+import com.toDoList.todolist_v20.objects.Variable
 
 class DataBaseManager(context: Context) {
 
@@ -20,7 +20,8 @@ class DataBaseManager(context: Context) {
 
     }
 
-    fun insertToDataBase(title: String, subtitle: String, tag: String, img: String){
+    fun insertToDataBase(title: String, subtitle: String, tag: String,
+                         img: String, idNotification: Int, ){
 
         val values = ContentValues().apply {
 
@@ -29,6 +30,9 @@ class DataBaseManager(context: Context) {
             put(dbContentTable.COLUMN_TAGS, tag)
             put(dbContentTable.COLUMN_IMAGE_URI, img)
             put(dbContentTable.COLUMN_ACCOUNTS, Variable.username)
+            put(dbContentTable.ID_NOTIFICATION, idNotification)
+            put(dbContentTable.DATA_NOTIFICATION, Variable.dataNotification)
+            put(dbContentTable.TIME_NOTIFICATION, Variable.timeNotification)
 
 
         }
@@ -48,6 +52,9 @@ class DataBaseManager(context: Context) {
             put(dbContentTable.COLUMN_TAGS, tag)
             put(dbContentTable.COLUMN_IMAGE_URI, img)
             put(dbContentTable.COLUMN_ACCOUNTS, Variable.username)
+            put(dbContentTable.DATA_NOTIFICATION, Variable.dataNotification)
+            put(dbContentTable.TIME_NOTIFICATION, Variable.timeNotification)
+            put(dbContentTable.ID_NOTIFICATION, Variable.notificationID)
 
 
 
@@ -80,6 +87,12 @@ class DataBaseManager(context: Context) {
 
             val dataID = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
 
+            val idNotificationDB = cursor.getInt(cursor.getColumnIndex(dbContentTable.ID_NOTIFICATION))
+
+            val dataNotificationDB = cursor.getString(cursor.getColumnIndex(dbContentTable.DATA_NOTIFICATION))
+
+            val timeNotificationDB = cursor.getString(cursor.getColumnIndex(dbContentTable.TIME_NOTIFICATION))
+
 
             val dataRC = DataRcView()
             dataRC.title = dataTitle
@@ -87,6 +100,9 @@ class DataBaseManager(context: Context) {
             dataRC.tag = dataTag
             dataRC.uri = dataURI
             dataRC.idItem = dataID
+            dataRC.idNotification = idNotificationDB
+            dataRC.dataNotification = dataNotificationDB
+            dataRC.timeNotification = timeNotificationDB
 
 
 
@@ -95,6 +111,26 @@ class DataBaseManager(context: Context) {
         }
         cursor.close()
         return dataList
+    }
+
+    @SuppressLint("Range")
+    fun getLastOrFirstId(element: Int): Int {
+
+        val cursor = db?.query(
+            DbContentTable.TABLE_NAME
+            , null,null, null
+            ,null,null,null)
+        var lastId = 0
+
+        if(cursor!=null && cursor.count !=0){
+
+            if (element == -1) { cursor.moveToLast() }
+            else if (element == 1){ cursor.moveToFirst() }
+            lastId = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
+
+        }
+        cursor?.close()
+        return lastId
     }
 
     fun closeDataBase(){

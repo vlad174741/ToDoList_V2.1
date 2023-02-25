@@ -1,5 +1,6 @@
 package com.toDoList.todolist_v20.objects
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.RadioButton
 import android.widget.TextView
@@ -9,6 +10,7 @@ import com.toDoList.todolist_v20.fragments.bindingMainFragment
 import com.toDoList.todolist_v20.fragments.rcAdapter
 import com.toDoList.todolist_v20.objects.Variable.dbManager
 
+@SuppressLint("StaticFieldLeak")
 object Tags {
 
     //Теги
@@ -40,6 +42,7 @@ object Tags {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     fun tagSelectMainFragment(button: RadioButton, tag: String){
 
         if (button.isChecked) {

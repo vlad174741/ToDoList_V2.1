@@ -85,6 +85,7 @@ class MainFragment : Fragment() {
         Log.d("liveFragment", "MainFragment.onResume")
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onPause() {
         super.onPause()
         rcAdapter.notifyDataSetChanged()

@@ -3,14 +3,20 @@ package com.toDoList.todolist_v20.classes
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -19,9 +25,15 @@ import androidx.core.net.toUri
 import com.toDoList.todolist_v20.dataBase.dbContent.DataBaseManager
 import com.toDoList.todolist_v20.dataBase.dbContent.MyIntentConstant
 import com.toDoList.todolist_v20.databinding.ActivityEditBinding
+import com.toDoList.todolist_v20.notificationAlarm.AlertData
+import com.toDoList.todolist_v20.notificationAlarm.Notification
+import com.toDoList.todolist_v20.notificationAlarm.messageNotification
+import com.toDoList.todolist_v20.notificationAlarm.titleNotification
 import com.toDoList.todolist_v20.objects.PhotoAndImage
 import com.toDoList.todolist_v20.objects.Tags
+import com.toDoList.todolist_v20.objects.ToastText
 import com.toDoList.todolist_v20.objects.Variable
+import java.util.*
 
 
 @SuppressLint("StaticFieldLeak")
@@ -30,7 +42,11 @@ lateinit var tag: String
 lateinit var imageName: String
 lateinit var uriImageDb: Uri
 lateinit var i: Intent
+lateinit var hideKeyboardEditActivity: InputMethodManager
 var id = 0
+var notificationChange = false
+@SuppressLint("StaticFieldLeak")
+var focusedView: View? = null
 
 
 
@@ -76,6 +92,7 @@ class EditActivity: AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,6 +105,13 @@ class EditActivity: AppCompatActivity() {
 
 
         Tags.dbTag = i.getStringExtra(MyIntentConstant.INTENT_TAG_KEY).toString()
+
+        Log.d("notificationAlarm", "id: " +
+                "${Variable.notificationID}  " +
+                "${Variable.dataNotification}  " +
+                "${Variable.timeNotification} ")
+
+
         tag = Tags.dbTag
         Tags.checkTagEditActivity(tag)
 
@@ -102,10 +126,15 @@ class EditActivity: AppCompatActivity() {
         bindingEdit.editTextEditActivitySubtitle.setText(i.getStringExtra(MyIntentConstant.INTENT_SUBTITLE_KEY))
         bindingEdit.imageViewActivityEdit.setImageURI(uriImageDb)
         imageName = bindingEdit.editTextEditActivityTitle.text.toString() + ".image"
+        bindingEdit.timePickerNotificationCardEditActivity.setIs24HourView(true)
+
+
+        hideKeyboardEditActivity = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         checkImage()
         buttonsEditActivity()
         Log.d("liveActivity", "EditActivity.onCreate")
+
 
 
 
@@ -154,23 +183,33 @@ class EditActivity: AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun buttonsEditActivity(){
 
         bindingEdit.apply {
             //Кнопка для сохранения заметки
             buttonSaveEditActivity.setOnClickListener {
-                buttonSaveEditActivity.isEnabled = false
-                val title = editTextEditActivityTitle.text.toString()
-                val subtitle = editTextEditActivitySubtitle.text.toString()
+                if(editTextEditActivityTitle.text.isNotEmpty()) {
+                    buttonSaveEditActivity.isEnabled = false
+                    val title = editTextEditActivityTitle.text.toString()
+                    val subtitle = editTextEditActivitySubtitle.text.toString()
 
-                checkSavePhoto()
-                dataBaseManager.updateToDataBase(title, subtitle, id, saveTag(), Variable.imgURI)
-                Variable.imgURI = "empty"
-                uriImageDb = Uri.parse("")
-                PhotoAndImage.uri = Uri.parse("")
-                Tags.dbTag = "empty"
-                finish()
+                    checkSavePhoto()
+                    dataBaseManager.updateToDataBase(
+                        title,
+                        subtitle,
+                        id,
+                        saveTag(),
+                        Variable.imgURI
+                    )
+                    if (notificationChange) {scheduleNotification()}
 
+                    Variable.imgURI = "empty"
+                    uriImageDb = Uri.parse("")
+                    PhotoAndImage.uri = Uri.parse("")
+                    Tags.dbTag = "empty"
+                    finish()
+                }else{ ToastText.shortToast(this@EditActivity, "Введите заголовок") }
 
             }
 
@@ -194,6 +233,57 @@ class EditActivity: AppCompatActivity() {
                 floatingActionButtonAddPhotoEditActivity.isEnabled = false
                 checkPermissions()
             }
+
+            comeBackImageViewEditActivity.setOnClickListener{
+                bindingEdit.cardViewNotificationTimerEditActivity.visibility = View.GONE
+            }
+
+            //Кнопка для добавления и редактирования уведомлений
+            floatingActionButtonAddNotificationTimerEditActivity2.setOnClickListener {
+                focusedView = currentFocus
+
+                if(editTextEditActivityTitle.text.isNotEmpty()) {
+
+                    if (Variable.notificationID != 0) {
+                        AlertData.showAlertToUpdateNotification(
+                            Variable.timeNotification,
+                            Variable.dataNotification, this@EditActivity, true
+                        )
+                    } else {
+                        bindingEdit.cardViewNotificationTimerEditActivity.visibility = View.VISIBLE
+
+                    }
+
+
+                }else{ ToastText.shortToast(this@EditActivity, "Введите заголовок") }
+
+                }
+
+            //Кнопка для применения выбранных даты и времени
+
+            buttonNotificationCardEditActivity.setOnClickListener {
+
+
+                    Variable.minute = bindingEdit.timePickerNotificationCardEditActivity.minute
+                    Variable.hour = timePickerNotificationCardEditActivity.hour
+                    Variable.day = datePickerNotificationCardEditActivity.dayOfMonth
+                    Variable.month = datePickerNotificationCardEditActivity.month
+                    Variable.year = datePickerNotificationCardEditActivity.year
+
+                val time = AlertData.getTime()
+                val date = Date(time)
+                val dateFormat = android.text.format.DateFormat.getLongDateFormat(applicationContext)
+                val timeFormat = android.text.format.DateFormat.getTimeFormat(applicationContext)
+                Variable.dataNotification = dateFormat.format(date)
+                Variable.timeNotification = timeFormat.format(date)
+                notificationChange = true
+                bindingEdit.cardViewNotificationTimerEditActivity.visibility = View.GONE
+                AlertData.showAlertToUpdateNotification(Variable.timeNotification,
+                    Variable.dataNotification, this@EditActivity, false)
+            }
+
+
+
             //Кнопка для удаления изображения
             floatingActionButtonDeletePhotoEditActivity.setOnClickListener {
                 alertDeleteDialog()
@@ -236,6 +326,38 @@ class EditActivity: AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun scheduleNotification()
+    {
+
+        val intent = Intent(applicationContext, Notification::class.java)
+
+
+        intent.putExtra(titleNotification,  bindingEdit.editTextEditActivityTitle.text.toString())
+        intent.putExtra(messageNotification, bindingEdit.editTextEditActivitySubtitle.text.toString())
+
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            Variable.notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = AlertData.getTime()
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+    }
+
+
+    fun showNotificationWindow() {
+        focusedView?.let { hideKeyboardEditActivity.hideSoftInputFromWindow(it.windowToken, 0) }
+        bindingEdit.cardViewNotificationTimerEditActivity.visibility = View.VISIBLE
+    }
 
 
     private fun alertDeleteDialog(){

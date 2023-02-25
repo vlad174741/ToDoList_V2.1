@@ -8,5 +8,8 @@ class DataRcView {
     var uri = ""
     var idItem = 0
     var select = false
+    var idNotification = 0
+    var dataNotification = ""
+    var timeNotification = ""
 
 }

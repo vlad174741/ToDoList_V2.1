@@ -1,8 +1,11 @@
 package com.toDoList.todolist_v20.classes
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.toDoList.todolist_v20.dataBase.dbAuthorization.DataBaseManagerAuth
 import com.toDoList.todolist_v20.objects.SharedPreference
@@ -10,6 +13,7 @@ import com.toDoList.todolist_v20.objects.Variable
 
 open class BasicActivity : AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Variable.dbManagerAuth = DataBaseManagerAuth(this)
@@ -17,6 +21,7 @@ open class BasicActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun checkUser(){
 
         SharedPreference.preferenceUsername(this)

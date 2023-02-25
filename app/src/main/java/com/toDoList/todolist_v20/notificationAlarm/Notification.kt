@@ -11,31 +11,23 @@ import androidx.core.app.NotificationCompat
 import com.toDoList.todolist_v20.R
 import com.toDoList.todolist_v20.objects.Variable
 
+const val titleNotification = "titleExtra"
+const val messageNotification = "messageExtra"
 
 class Notification : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationBuilder = NotificationCompat.Builder(context, Variable.channelID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(Variable.titleNotification)
-            .setContentText(Variable.messageNotification)
+            .setContentTitle(intent.getStringExtra(titleNotification))
+            .setContentText(intent.getStringExtra(messageNotification))
             .build()
 
         val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         manager.notify(Variable.notificationID, notificationBuilder)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun createNotificationChannel(activity: Activity)
-    {
-        val name = Variable.titleNotification
-        val desc = Variable.titleNotification
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(Variable.channelID, name, importance)
-        channel.description = desc
-        val notificationManager = activity.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
+
 
 
 

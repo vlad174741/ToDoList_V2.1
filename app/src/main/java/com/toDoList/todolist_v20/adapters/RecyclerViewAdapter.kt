@@ -57,6 +57,7 @@ class RecyclerViewAdapter(listMain:ArrayList<DataRcView>, private var contextRC:
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder:ViewHolderAdapter, position: Int) {
         Log.d("rcState", "onBindViewHolder")
 
@@ -202,7 +203,11 @@ class RecyclerViewAdapter(listMain:ArrayList<DataRcView>, private var contextRC:
                 putExtra(MyIntentConstant.INTENT_ID_KEY,itemList.idItem)
 
 
+
             }
+            Variable.notificationID = itemList.idNotification
+            Variable.dataNotification = itemList.dataNotification
+            Variable.timeNotification = itemList.timeNotification
 
             contextRC.startActivity(editActivity)
 
@@ -222,6 +227,7 @@ class RecyclerViewAdapter(listMain:ArrayList<DataRcView>, private var contextRC:
 
 
     //Функция для снятия выделенных элементов списка
+    @SuppressLint("NotifyDataSetChanged")
     fun clearItemSelect(){
         itemSelectList.clear()
         if (itemSelectList.isEmpty()){ isEnable = false }

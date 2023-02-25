@@ -1,8 +1,12 @@
 package com.toDoList.todolist_v20.dataBase.dbAuthorization
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.toDoList.todolist_v20.notificationAlarm.AlertData
 import com.toDoList.todolist_v20.objects.SharedPreference
 import com.toDoList.todolist_v20.objects.Variable
 
@@ -44,6 +48,7 @@ class DataBaseManagerAuth(var context: Context) {
         Variable.auth=true
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun checkAccount() {
 
         val selection = "${dbAuthTable.COLUMN_USERNAME} = ?"
@@ -62,6 +67,7 @@ class DataBaseManagerAuth(var context: Context) {
             if (cursor != null && cursor.count!=0) {
                 findAccountId(SharedPreference.authUsernamePref)
             }else{
+                AlertData.createNotificationChannel(context)
                 createAccount(SharedPreference.authUsernamePref)
             }
 
@@ -71,6 +77,7 @@ class DataBaseManagerAuth(var context: Context) {
 
 
 
+    @SuppressLint("Range")
     private fun findAccountId(username: String) {
 
         val selection = "${dbAuthTable.COLUMN_USERNAME} = ?"

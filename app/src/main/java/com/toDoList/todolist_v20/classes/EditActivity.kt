@@ -25,10 +25,7 @@ import androidx.core.net.toUri
 import com.toDoList.todolist_v20.dataBase.dbContent.DataBaseManager
 import com.toDoList.todolist_v20.dataBase.dbContent.MyIntentConstant
 import com.toDoList.todolist_v20.databinding.ActivityEditBinding
-import com.toDoList.todolist_v20.notificationAlarm.AlertData
-import com.toDoList.todolist_v20.notificationAlarm.Notification
-import com.toDoList.todolist_v20.notificationAlarm.messageNotification
-import com.toDoList.todolist_v20.notificationAlarm.titleNotification
+import com.toDoList.todolist_v20.notificationAlarm.*
 import com.toDoList.todolist_v20.objects.PhotoAndImage
 import com.toDoList.todolist_v20.objects.Tags
 import com.toDoList.todolist_v20.objects.ToastText
@@ -43,10 +40,10 @@ lateinit var imageName: String
 lateinit var uriImageDb: Uri
 lateinit var i: Intent
 lateinit var hideKeyboardEditActivity: InputMethodManager
-var id = 0
 var notificationChange = false
 @SuppressLint("StaticFieldLeak")
 var focusedView: View? = null
+
 
 
 
@@ -101,15 +98,13 @@ class EditActivity: AppCompatActivity() {
         dataBaseManager.openDataBase()
 
         i = intent
-        id = i.getIntExtra(MyIntentConstant.INTENT_ID_KEY,0)
+        Variable.id = i.getIntExtra(MyIntentConstant.INTENT_ID_KEY,0)
 
 
         Tags.dbTag = i.getStringExtra(MyIntentConstant.INTENT_TAG_KEY).toString()
 
-        Log.d("notificationAlarm", "id: " +
-                "${Variable.notificationID}  " +
-                "${Variable.dataNotification}  " +
-                "${Variable.timeNotification} ")
+
+        Variable.notificationSingIn = i.getBooleanExtra(MyIntentConstant.singInWithNotification, false)
 
 
         tag = Tags.dbTag
@@ -119,6 +114,9 @@ class EditActivity: AppCompatActivity() {
         uriImageDb = i.getStringExtra(MyIntentConstant.INTENT_URL_KEY).toString().toUri()
         Variable.imgURI = uriImageDb.toString()
         PhotoAndImage.uri = Uri.parse("")
+
+        Log.d("notificationAlarm", "\n" + "id: " +
+                Variable.id + "\n" + "tag: " + Tags.dbTag + "\n"  + "img: " + Variable.imgURI )
 
 
 
@@ -198,7 +196,7 @@ class EditActivity: AppCompatActivity() {
                     dataBaseManager.updateToDataBase(
                         title,
                         subtitle,
-                        id,
+                        Variable.id,
                         saveTag(),
                         Variable.imgURI
                     )
@@ -208,7 +206,7 @@ class EditActivity: AppCompatActivity() {
                     uriImageDb = Uri.parse("")
                     PhotoAndImage.uri = Uri.parse("")
                     Tags.dbTag = "empty"
-                    finish()
+                    closeActivityWithNotification()
                 }else{ ToastText.shortToast(this@EditActivity, "Введите заголовок") }
 
             }
@@ -326,6 +324,17 @@ class EditActivity: AppCompatActivity() {
 
     }
 
+    fun closeActivityWithNotification(){
+        if (Variable.notificationSingIn){
+            var intent = Intent(this@EditActivity, MainActivity::class.java)
+            i.putExtra(MyIntentConstant.singInWithNotification,  false)
+            Variable.notificationSingIn = false
+            startActivity(intent)
+            finish()
+        }
+        else{finish()}
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     fun scheduleNotification()
     {
@@ -335,6 +344,9 @@ class EditActivity: AppCompatActivity() {
 
         intent.putExtra(titleNotification,  bindingEdit.editTextEditActivityTitle.text.toString())
         intent.putExtra(messageNotification, bindingEdit.editTextEditActivitySubtitle.text.toString())
+        intent.putExtra(MyIntentConstant.INTENT_TAG_KEY, Tags.dbTag)
+        intent.putExtra(MyIntentConstant.INTENT_URL_KEY, Variable.imgURI)
+
 
 
         val pendingIntent = PendingIntent.getBroadcast(

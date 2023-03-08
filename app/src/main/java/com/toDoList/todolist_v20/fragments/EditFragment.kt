@@ -27,6 +27,7 @@ import androidx.fragment.app.activityViewModels
 import com.toDoList.todolist_v20.classes.ViewModelMy
 import com.toDoList.todolist_v20.classes.bindingEdit
 import com.toDoList.todolist_v20.dataBase.dbContent.DataBaseManager
+import com.toDoList.todolist_v20.dataBase.dbContent.MyIntentConstant
 import com.toDoList.todolist_v20.dataClass.Data
 import com.toDoList.todolist_v20.databinding.FragmentEditBinding
 import com.toDoList.todolist_v20.notificationAlarm.*
@@ -283,6 +284,7 @@ class EditFragment : Fragment() {
                 }else{
                     ToastText.shortToast(contextEditFragment, "Сохраняем")
                     hideKeyboard.hideSoftInputFromWindow(requireView().windowToken, 0)
+                    Variable.id = dbManager.getLastOrFirstId(-1) + 1
 
 
                     dbManager.insertToDataBase(
@@ -327,6 +329,8 @@ class EditFragment : Fragment() {
 
         intent.putExtra(titleNotification, titleExtra)
         intent.putExtra(messageNotification, messageExtra)
+        intent.putExtra(MyIntentConstant.INTENT_TAG_KEY, Tags.dbTag)
+        intent.putExtra(MyIntentConstant.INTENT_URL_KEY, Variable.imgURI)
 
 
         val pendingIntent = PendingIntent.getBroadcast(

@@ -3,7 +3,6 @@ package com.toDoList.todolist_v20.objects
 import android.annotation.SuppressLint
 import com.toDoList.todolist_v20.dataBase.dbAuthorization.DataBaseManagerAuth
 import com.toDoList.todolist_v20.dataBase.dbContent.DataBaseManager
-import java.text.DateFormat
 
 
 object Variable {
@@ -32,6 +31,7 @@ object Variable {
     //Notification
     const val nameChanel = "Напоминания"
     const val descriptionChanel = "Уведомления с напоминанием"
+    var notificationSingIn = false
     var dataNotification = ""
     var timeNotification = ""
     var notificationID = 0

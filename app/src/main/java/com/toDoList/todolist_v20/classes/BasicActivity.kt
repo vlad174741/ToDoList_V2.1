@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.toDoList.todolist_v20.dataBase.dbAuthorization.DataBaseManagerAuth
+import com.toDoList.todolist_v20.dataBase.dbContent.MyIntentConstant
 import com.toDoList.todolist_v20.objects.SharedPreference
 import com.toDoList.todolist_v20.objects.Variable
 
@@ -17,7 +18,10 @@ open class BasicActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Variable.dbManagerAuth = DataBaseManagerAuth(this)
+        Variable.notificationSingIn = intent.getBooleanExtra(MyIntentConstant.singInWithNotification, false)
+
         checkUser()
+
 
     }
 
@@ -37,7 +41,11 @@ open class BasicActivity : AppCompatActivity() {
         if (Variable.auth){
             finish()
             val intentMainActivity = Intent(this, MainActivity::class.java)
-            startActivity(intentMainActivity)
+            val intentEditActivity = Intent(this, EditActivity::class.java)
+            if (Variable.notificationSingIn){
+                startActivity(intentEditActivity)
+            }
+            else {startActivity(intentMainActivity)}
             Log.d("liveActivity", "BasicActivity.open.MainActivity")
 
         }else{

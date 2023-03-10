@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.toDoList.todolist_v20.R
+import com.toDoList.todolist_v20.dataBase.dbContent.MyIntentConstant
 import com.toDoList.todolist_v20.databinding.AuthPinFormBinding
 import com.toDoList.todolist_v20.objects.Variable
 import com.toDoList.todolist_v20.objects.Variable.dbManagerAuth
@@ -20,27 +21,39 @@ import com.toDoList.todolist_v20.objects.Variable.dbManagerAuth
 
 @SuppressLint("StaticFieldLeak")
 lateinit var bindingAuth:AuthPinFormBinding
-
+lateinit var intentMainActivity:Intent
 class AuthClass: AppCompatActivity() {
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
         bindingAuth = AuthPinFormBinding.inflate(layoutInflater)
         setContentView(bindingAuth.root)
-        if(!Variable.passwordCheck){ checkBiometric()}
-        fingerPrintButton()
-        pinCodeButtons()
+
+
+
 
         Log.d("liveActivity", "AuthClass.onCreate")
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onStart() {
         super.onStart()
         Log.d("liveActivity", "AuthClass.onStart")
+        intentMainActivity = Intent(this, MainActivity::class.java)
+
+        if (!Variable.auth){
+            dbManagerAuth.openDataBase()
+            dbManagerAuth.checkAccount()
+
+            if (Variable.auth){startActivity(intentMainActivity); finish()}
+        }
+
+        if(!Variable.passwordCheck){ checkBiometric()}
+        fingerPrintButton()
+        pinCodeButtons()
 
 
     }
@@ -145,7 +158,8 @@ class AuthClass: AppCompatActivity() {
 
                 if (bindingAuth.textViewPin.text.toString() == Variable.password) {
                     val intentMainActivity = Intent(this, MainActivity::class.java)
-                    startActivity(intentMainActivity)
+                    if (Variable.notificationSingIn){singInWithNotification()}
+                    else{ startActivity(intentMainActivity) }
                     finish()
                 } else {
                     bindingAuth.textViewPin.text = ""
@@ -215,8 +229,12 @@ class AuthClass: AppCompatActivity() {
                     }
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
                         super.onAuthenticationSucceeded(result)
-                        ContextCompat.startActivity(this@AuthClass,main, null)
-                        Variable.auth=true
+                        if (Variable.notificationSingIn){
+                            singInWithNotification()
+                        }else{
+                            ContextCompat.startActivity(this@AuthClass, main, null)
+                        }
+                        Variable.auth = true
                     }
                 }
             )
@@ -225,6 +243,22 @@ class AuthClass: AppCompatActivity() {
 
 
         }
+    }
+
+    fun singInWithNotification(){
+
+        val intentEditActivity = Intent(this, EditActivity::class.java)
+        Variable.id = intent.getIntExtra(MyIntentConstant.INTENT_ID_KEY, 0)
+
+        intentEditActivity.putExtra(MyIntentConstant.INTENT_TITLE_KEY, intent.getStringExtra(MyIntentConstant.INTENT_TITLE_KEY))
+        intentEditActivity.putExtra(MyIntentConstant.INTENT_SUBTITLE_KEY, intent.getStringExtra(MyIntentConstant.INTENT_SUBTITLE_KEY))
+        intentEditActivity.putExtra(MyIntentConstant.INTENT_TAG_KEY, intent.getStringExtra(MyIntentConstant.INTENT_TAG_KEY))
+        intentEditActivity.putExtra(MyIntentConstant.singInWithNotification,  true)
+        intentEditActivity.putExtra(MyIntentConstant.INTENT_ID_KEY, Variable.id)
+        intentEditActivity.putExtra(MyIntentConstant.INTENT_URL_KEY, intent.getStringExtra(MyIntentConstant.INTENT_URL_KEY))
+
+        startActivity(intentEditActivity)
+
     }
 
 

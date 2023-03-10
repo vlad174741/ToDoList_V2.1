@@ -7,7 +7,8 @@ object MyIntentConstant {
     const val INTENT_URL_KEY = "url_key"
     const val INTENT_ID_KEY = "id_key"
     const val INTENT_TAG_KEY = "id_tag"
-    const val singInWithNotification = "singInExtra"
+    const val singInWithNotification = "sing_in_with_notification"
+    const val singInWithOutNotification = "sing_in_without_notification"
 
     var INTENT_ID_NOTIFICATION = "id_notification"
     var INTENT_DATA_NOTIFICATION = "id_notification"

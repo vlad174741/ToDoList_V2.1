@@ -199,6 +199,7 @@ class EditActivity: AppCompatActivity() {
                         Variable.id,
                         saveTag(),
                         Variable.imgURI
+
                     )
                     if (notificationChange) {scheduleNotification()}
 
@@ -324,13 +325,16 @@ class EditActivity: AppCompatActivity() {
 
     }
 
-    fun closeActivityWithNotification(){
+    private fun closeActivityWithNotification(){
         if (Variable.notificationSingIn){
-            var intent = Intent(this@EditActivity, MainActivity::class.java)
-            i.putExtra(MyIntentConstant.singInWithNotification,  false)
+            val intent = Intent(this@EditActivity, BasicActivity::class.java)
+            finishAndRemoveTask()
             Variable.notificationSingIn = false
+            Variable.auth = false
+            Variable.passwordCheck = false
+            Variable.fingerPrintYes = false
             startActivity(intent)
-            finish()
+
         }
         else{finish()}
     }
@@ -339,20 +343,22 @@ class EditActivity: AppCompatActivity() {
     fun scheduleNotification()
     {
 
-        val intent = Intent(applicationContext, Notification::class.java)
+        val intentNotification = Intent(applicationContext, Notification::class.java)
 
 
-        intent.putExtra(titleNotification,  bindingEdit.editTextEditActivityTitle.text.toString())
-        intent.putExtra(messageNotification, bindingEdit.editTextEditActivitySubtitle.text.toString())
-        intent.putExtra(MyIntentConstant.INTENT_TAG_KEY, Tags.dbTag)
-        intent.putExtra(MyIntentConstant.INTENT_URL_KEY, Variable.imgURI)
+        intentNotification.putExtra(titleNotification,  bindingEdit.editTextEditActivityTitle.text.toString())
+        intentNotification.putExtra(messageNotification, bindingEdit.editTextEditActivitySubtitle.text.toString())
+        intentNotification.putExtra(MyIntentConstant.INTENT_TAG_KEY, Tags.dbTag)
+        intentNotification.putExtra(MyIntentConstant.INTENT_URL_KEY, Variable.imgURI)
+
+
 
 
 
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
             Variable.notificationID,
-            intent,
+            intentNotification,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 

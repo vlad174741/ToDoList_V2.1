@@ -48,6 +48,7 @@
 
 
         <activity android:name=".classes.BasicActivity"
+
             android:screenOrientation="portrait"
 
             android:exported="true">
